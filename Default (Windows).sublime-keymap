@@ -1,0 +1,5 @@
+[
+    {
+        "keys": ["ctrl+super+n"], "command": "copy_namespace"
+    }
+]
