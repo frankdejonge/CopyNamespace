@@ -1,3 +1,3 @@
 [
-    { "command": "copy_namespace", "caption": "Copy PHP Namespace" }
+    { "command": "copy_namespace", "caption": "Copy PHP Namespace", "args": [true]}
 ]

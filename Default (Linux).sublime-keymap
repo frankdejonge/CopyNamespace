@@ -1,5 +1,8 @@
 [
     {
         "keys": ["ctrl+super+n"], "command": "copy_namespace"
+    },
+    {
+        "keys": ["ctrl+super+c"], "command": "copy_classname"
     }
 ]
