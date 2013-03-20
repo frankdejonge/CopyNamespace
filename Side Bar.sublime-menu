@@ -1,0 +1,4 @@
+[
+    { "caption": "-" },
+	{ "command": "copy_namespace", "args": { "paths": [] }, "caption": "Copy PHP Namespace" }
+]
