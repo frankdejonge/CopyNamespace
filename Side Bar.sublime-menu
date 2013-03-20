@@ -1,3 +1,12 @@
 [
-    { "command": "copy_namespace", "caption": "Copy PHP Namespace", "args": [true]}
+    { "caption": "-" },
+    {
+        "caption": "PHP Copy",
+        "children":
+        [
+            { "command": "copy_namespace", "caption": "Namespace" },
+            { "command": "copy_classname", "caption": "Class Name", "args": {"with_namespace": false} },
+            { "command": "copy_classname", "caption": "Namespace & Class Name", "args": {"with_namespace": true} }
+        ]
+    }
 ]

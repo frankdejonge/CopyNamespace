@@ -3,25 +3,30 @@ import sublime, sublime_plugin
 class CopyNamespaceCommand(sublime_plugin.WindowCommand):
 	def run(self, args = {}):
 		sublime.set_clipboard('')
+		silent = False
+		if 'silent' in args:
+			silent = agrs.silent
+
 		view = self.window.active_view()
 		region = view.find('(?<=namespace\s)([a-z]|\\\\)*', 0, sublime.IGNORECASE)
 		if region != None and region.empty() == False:
 			namespace = view.substr(region)
-			print 'namespace: '+namespace
 			sublime.set_clipboard(namespace)
-			if hasattr(args, "silent") == False or agrs.silent == False:
+			if silent == False:
 				sublime.status_message('Copied namespace: '+namespace)
 		else:
-			if hasattr(args, "silent") == False or agrs.silent == False:
+			if silent == False:
 				sublime.error_message('Could not detect a namespace')
 
 class CopyClassnameCommand(sublime_plugin.WindowCommand):
-	def run(self):
+	def run(self, args = {}):
 		sublime.set_clipboard('')
-		s = sublime.load_settings("CopyClassname.sublime-settings");
 		prefix = "";
+		with_namespace = True
+		if 'with_namespace' in args:
+			with_namespace = agrs.with_namespace
 
-		if s.get("copy_with_namespace"):
+		if with_namespace:
 			sublime.run_command("copy_namespace", {'silent': True})
 			prefix = sublime.get_clipboard()
 			if len(prefix) > 0:
