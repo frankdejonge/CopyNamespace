@@ -1,42 +1,45 @@
 import sublime, sublime_plugin
 
-class CopyNamespaceCommand(sublime_plugin.WindowCommand):
-	def run(self, args = {}):
-		sublime.set_clipboard('')
-		silent = False
-		if 'silent' in args:
-			silent = agrs.silent
+class CopyPhpSniffer:
+	def __init__(self, view):
+		self.view = view
 
-		view = self.window.active_view()
-		region = view.find('(?<=namespace\s)([a-z]|\\\\)*', 0, sublime.IGNORECASE)
+	def find(self, expression):
+		expression = '(?<='+expression+'\s)([a-z]|\\\\)*'
+		region = self.view.find(expression, 0, sublime.IGNORECASE)
 		if region != None and region.empty() == False:
-			namespace = view.substr(region)
-			sublime.set_clipboard(namespace)
-			if silent == False:
-				sublime.status_message('Copied namespace: '+namespace)
+			return self.view.substr(region)
+
+		return False
+
+
+class CopyNamespaceCommand(sublime_plugin.WindowCommand):
+	def run(self):
+		sublime.set_clipboard('')
+		sniffer = CopyPhpSniffer(self.window.active_view())
+		namespace = sniffer.find('namespace');
+		if namespace != False:
+			sublime.set_clipboard(namespace);
+			sublime.status_message('Copied namespace: '+namespace)
 		else:
-			if silent == False:
-				sublime.error_message('Could not detect a namespace')
+			sublime.error_message('Could not find a namespace')
 
 class CopyClassnameCommand(sublime_plugin.WindowCommand):
-	def run(self, args = {}):
+	def run(self, with_namespace=True):
 		sublime.set_clipboard('')
-		prefix = "";
-		with_namespace = True
-		if 'with_namespace' in args:
-			with_namespace = agrs.with_namespace
+		sniffer = CopyPhpSniffer(self.window.active_view())
+		prefix = ''
+		if with_namespace == True:
+			namespace = sniffer.find('namespace')
+			if namespace != False:
+				prefix = namespace+'\\'
 
-		if with_namespace:
-			sublime.run_command("copy_namespace", {'silent': True})
-			prefix = sublime.get_clipboard()
-			if len(prefix) > 0:
-				prefix.append('\\');
+		for option in ['class', 'interface', 'trait']:
+			result = sniffer.find(option)
+			if result != False:
+				sublime.set_clipboard(prefix+result)
+				sublime.status_message('Copied '+option+': '+prefix+result)
+				break
 
-		view = self.window.active_view()
-		region = view.find('(?<=class\s)([a-z])*', 0, sublime.IGNORECASE)
-		if region != None and region.empty() == False:
-			namespace = prefix + view.substr(region)
-			sublime.set_clipboard(namespace)
-			sublime.status_message('Copied class name: '+namespace)
-		else:
-			sublime.error_message('Could not detect a class name')
+		if result == False:
+			sublime.error_message('Could not find a class, interface or trait.')

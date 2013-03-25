@@ -4,5 +4,8 @@
     },
     {
         "keys": ["ctrl+super+c"], "command": "copy_classname"
+    },
+    {
+        "keys": ["ctrl+alt+super+c"], "command": "copy_classname", "args": { "with_namespace": true }
     }
 ]
