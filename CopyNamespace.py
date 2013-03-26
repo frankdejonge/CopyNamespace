@@ -5,7 +5,7 @@ class CopyPhpSniffer:
 		self.view = view
 
 	def find(self, expression):
-		expression = '(?<='+expression+'\s)([a-z]|\\\\)*'
+		expression = '[^|\n](?<='+expression+'\s)([a-z]|\\\\)*'
 		region = self.view.find(expression, 0, sublime.IGNORECASE)
 		if region != None and region.empty() == False:
 			return self.view.substr(region)
