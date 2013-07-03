@@ -8,7 +8,9 @@ class CopyPhpSniffer:
 		expression = '[^|\n](?<='+expression+'\s)([a-z]|\\\\)*'
 		region = self.view.find(expression, 0, sublime.IGNORECASE)
 		if region != None and region.empty() == False:
-			return self.view.substr(region)
+			result = self.view.substr(region)
+			if result != False:
+				return result.strip()
 
 		return False
 
