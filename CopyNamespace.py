@@ -27,7 +27,7 @@ class CopyNamespaceCommand(sublime_plugin.WindowCommand):
 			sublime.error_message('Could not find a namespace')
 
 class CopyClassnameCommand(sublime_plugin.WindowCommand):
-	def run(self, with_namespace=True):
+	def run(self, with_namespace=False):
 		sublime.set_clipboard('')
 		sniffer = CopyPhpSniffer(self.window.active_view())
 		prefix = ''
